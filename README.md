@@ -85,7 +85,7 @@ services:
       DB_PASSWORD: vvveb
       DB_ENGINE: mysqli #sqlite,pgsql
     volumes:
-      - vvveb-volume:/var/www/html
+      - vvveb-volume:/var/www/vvveb/
       - db:/var/lib/mysql
     ports:
       - "8080:80"
