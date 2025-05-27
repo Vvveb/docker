@@ -1,4 +1,4 @@
-FROM php:8.3-fpm-alpine
+FROM php:8.4-fpm-alpine
 
 RUN apk update && \
 	apk add --no-cache \
@@ -12,9 +12,9 @@ RUN chown -R www-data:www-data /var/lib/nginx
 RUN chmod -R 755 /var/lib/nginx
 
 RUN sed -ri -e 's!user nginx;!user www-data;!g' /etc/nginx/nginx.conf
-RUN sed -ri -e 's!client_max_body_size 1m;!client_max_body_size 50m;!g' /etc/nginx/nginx.conf
+RUN sed -ri -e 's!client_max_body_size 1m;!client_max_body_size 200m;!g' /etc/nginx/nginx.conf
 
-ENV DIR_VVVEB='/var/www/vvveb/public'
+ENV DIR_VVVEB='/var/www/html/public'
 
 WORKDIR ${DIR_VVVEB}
 

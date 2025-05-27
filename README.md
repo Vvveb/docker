@@ -19,18 +19,18 @@ https://github.com/givanz/Vvveb
 With SQLite
 
 ```console
-docker run -p 8080:80 vvveb/vvvebcms:php8.3-fpm-alpine
+docker run -p 8080:80 vvveb/vvvebcms:latest
 ```
 With MySQL
 
 ```console
-docker run --name some-vvveb --link some-mysql:mysql -d vvveb/vvvebcms:php8.3-fpm-alpine
+docker run --name some-vvveb --link some-mysql:mysql -d vvveb/vvvebcms:latest
 ```
 
 With PosgreSQL
 
 ```console
-docker run --name some-vvveb --link some-pgsql:pgsql -d vvveb/vvvebcms:php8.3-fpm-alpine
+docker run --name some-vvveb --link some-pgsql:pgsql -d vvveb/vvvebcms:latest
 ```
 
 Then, access it via `http://localhost:8080` or `http://host-ip:8080` in a browser.
@@ -54,7 +54,7 @@ docker run --name vvveb \
   -e DB_PORT=10432 \
   -e DB_USER=... \
   -e DB_PASSWORD=... \
-  -d vvveb/vvvebcms:php8.3-fpm-alpine
+  -d vvveb/vvvebcms:latest
 ```
 
 ## Via [`docker-compose`](https://github.com/docker/compose)
@@ -77,7 +77,7 @@ services:
       - internal
 
   php:
-    image: vvveb/vvvebcms:php8.3-fpm-alpine
+    image: vvveb/vvvebcms:latest
     environment:
       DB_HOST: db
       DB_DATABASE: vvveb
@@ -85,7 +85,7 @@ services:
       DB_PASSWORD: vvveb
       DB_ENGINE: mysqli #sqlite,pgsql
     volumes:
-      - vvveb-volume:/var/www/vvveb/
+      - vvveb-volume:/var/www/html/
       - db:/var/lib/mysql
     ports:
       - "8080:80"
@@ -128,18 +128,17 @@ View [license information](https://github.com/givanz/Vvveb?tab=AGPL-3.0-1-ov-fil
 
 # Building images from Dockerfile
 
-## PHP 8.3 Fpm Alpine
+## PHP 8.4 Fpm Alpine
 
 ```console
-cd latest/php8.3/fpm-alpine
-sudo docker buildx build --push -t vvveb/vvvebcms:php8.3-fpm-alpine \
+cd latest/php8.4/fpm-alpine
+sudo docker buildx build --push -t vvveb/vvvebcms:php8.4-fpm-alpine \
 	--platform=linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/386,linux/arm64,linux/arm/v8,linux/arm/v7,linux/arm/v6 .
 ```
-## PHP 8.3 Apache
+## PHP 8.4 Apache
 
 ```console
-cd latest/php8.3/apache
-sudo docker buildx build --push -t vvveb/vvvebcms:php8.3-apache \
+cd latest/php8.4/apache
+sudo docker buildx build --push -t vvveb/vvvebcms:php8.4-apache \
 	--platform=linux/amd64,linux/amd64/v2,linux/amd64/v3,linux/386,linux/arm64,linux/arm/v8,linux/arm/v7,linux/arm/v6 .
 ```
-

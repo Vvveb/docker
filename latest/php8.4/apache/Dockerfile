@@ -1,8 +1,8 @@
-FROM php:8.3-apache
+FROM php:8.4-apache
 
 #change apache document root to public for better security
-RUN sed -ri -e 's!/var/www/html!/var/www/vvveb/public!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!/var/www/vvveb/public!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
+RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf
+RUN sed -ri -e 's!/var/www/!/var/www/html/public!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
 RUN apt-get clean \
   && apt-get update \
@@ -23,6 +23,7 @@ RUN apt-get clean \
   && pecl bundle -d /usr/src/php/ext apcu \
   && docker-php-ext-install /usr/src/php/ext/apcu \
   && docker-php-ext-install mysqli \
+  && docker-php-ext-install pgsql \
   && rm -rf /var/cache/apt/archives /var/lib/apt/lists/*
 
 #RUN usermod -u ${PHP_USER_ID} www-data
@@ -30,13 +31,15 @@ RUN usermod -u 1000 www-data
 
 COPY php.ini ${PHP_INI_DIR}
 
-ENV DIR_VVVEB='/var/www/vvveb'
+ENV DIR_VVVEB='/var/www/html'
 RUN chown -R www-data:www-data ${DIR_VVVEB}
 
 RUN a2enmod rewrite
 #RUN a2enmod lbmethod_byrequests
 
 WORKDIR ${DIR_VVVEB}
+VOLUME ${DIR_VVVEB}
+
 EXPOSE 80
 
 COPY init.sh /init.sh

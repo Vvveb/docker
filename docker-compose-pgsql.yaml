@@ -1,0 +1,42 @@
+services:
+  db:
+    image: mariadb:latest
+    restart: always
+    environment:
+      MARIADB_ROOT_PASSWORD: vvveb
+      MARIADB_DATABASE: vvveb
+      MARIADB_USER: vvveb
+      MARIADB_PASSWORD: vvveb
+    volumes:
+      - db:/var/lib/mariadb
+    networks:
+      - internal
+
+  php:
+    image: vvveb/vvvebcms:latest
+    environment:
+      DB_HOST: db
+      DB_DATABASE: vvveb
+      DB_USER: vvveb
+      DB_PASSWORD: vvveb
+      DB_ENGINE: mysqli #sqlite,pgsql
+    volumes:
+      - vvveb-volume:/var/www/html
+      - db:/var/lib/mariadb
+    ports:
+      - "8080:80"
+    links:
+      - db:mariadb
+    depends_on:
+      - db
+    networks:
+      - internal
+
+
+volumes:
+  vvveb-volume:
+  db:
+
+networks:
+  internal:
+    driver: bridge

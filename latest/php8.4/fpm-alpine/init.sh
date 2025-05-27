@@ -1,7 +1,7 @@
 #!/bin/sh
 
-if [ ! -d /var/www/vvveb/public/ ]; then
-	export DIR_VVVEB='/var/www/vvveb'
+if [ ! -d /var/www/html/public/ ]; then
+	export DIR_VVVEB='/var/www/html'
 	export DIR_CONFIG=${DIR_VVVEB}'/config'
 	export DIR_PUBLIC=${DIR_VVVEB}'/public'
 	export DIR_PLUGINS=${DIR_VVVEB}'/plugins'
@@ -12,9 +12,10 @@ if [ ! -d /var/www/vvveb/public/ ]; then
 	export DIR_IMAGE_CACHE=${DIR_PUBLIC}'/image-cache'
 
 	curl -Lo /tmp/vvveb.zip https://www.vvveb.com/download.php 
-	unzip /tmp/vvveb.zip -d ${DIR_VVVEB}
+	unzip -o /tmp/vvveb.zip -d ${DIR_VVVEB}
 	rm -rf /tmp/vvveb.zip
 	
+	touch ${DIR_STORAGE}/logs/error_log
 	chown -R www-data:www-data ${DIR_VVVEB}
 	chmod -R 744 ${DIR_VVVEB}
 	chmod -R 733 ${DIR_STORAGE}

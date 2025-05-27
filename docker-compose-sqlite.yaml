@@ -1,0 +1,20 @@
+services:
+
+  php:
+    image: vvveb/vvvebcms:latest
+    environment:
+      DB_ENGINE: sqlite #mysqli,sqlite,pgsql
+    volumes:
+      - vvveb-volume:/var/www/html
+    ports:
+      - "8080:80"
+    networks:
+      - internal
+
+
+volumes:
+  vvveb-volume:
+
+networks:
+  internal:
+    driver: bridge
