@@ -1,4 +1,4 @@
-FROM php:8.4-apache
+FROM php:8.5.1-apache
 
 #change apache document root to public for better security
 RUN sed -ri -e 's!/var/www/html!/var/www/html/public!g' /etc/apache2/sites-available/*.conf
@@ -8,6 +8,7 @@ RUN apt-get clean \
   && apt-get update \
   && apt-get install -y \
   unzip \
+  supervisor \
   libfreetype6-dev \
   libjpeg62-turbo-dev \
   libxml2-dev \
@@ -15,6 +16,7 @@ RUN apt-get clean \
   libpng-dev \
   libzip-dev \
   libonig-dev \
+  libpq-dev \
   libcurl4-openssl-dev \
   && docker-php-ext-configure gd  --with-webp --with-jpeg \
   && docker-php-ext-install -j$(nproc) gd \
@@ -42,6 +44,7 @@ VOLUME ${DIR_VVVEB}
 
 EXPOSE 80
 
+COPY supervisord.conf /etc/
 COPY init.sh /init.sh
 RUN chmod +x /init.sh
 

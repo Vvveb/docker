@@ -1,14 +1,14 @@
 services:
   db:
-    image: mariadb:latest
+    image: postgres:latest
     restart: always
     environment:
-      MARIADB_ROOT_PASSWORD: vvveb
-      MARIADB_DATABASE: vvveb
-      MARIADB_USER: vvveb
-      MARIADB_PASSWORD: vvveb
+      POSTGRES_PASSWORD: vvveb
+      POSTGRES_DB: vvveb
+      POSTGRES_USER: vvveb
+      POSTGRES_PASSWORD: vvveb
     volumes:
-      - db:/var/lib/mariadb
+      - db:/var/lib/postgres
     networks:
       - internal
 
@@ -19,14 +19,14 @@ services:
       DB_DATABASE: vvveb
       DB_USER: vvveb
       DB_PASSWORD: vvveb
-      DB_ENGINE: mysqli #sqlite,pgsql
+      DB_ENGINE: pgsql #sqlite,mysqli
     volumes:
       - vvveb-volume:/var/www/html
-      - db:/var/lib/mariadb
+      - db:/var/lib/postgres
     ports:
       - "8080:80"
     links:
-      - db:mariadb
+      - db:pgsql
     depends_on:
       - db
     networks:

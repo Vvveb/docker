@@ -1,12 +1,17 @@
-FROM php:8.4-fpm-alpine
+FROM php:8.5.1-fpm-alpine
 
 RUN apk update && \
 	apk add --no-cache \
 	nginx \
 	libjpeg-turbo \
 	libheif \
+	libwebp \
 	imagemagick \
 	libpq \
+	libzip \
+	libavif \
+	libintl \
+	icu-libs \
 	postgresql17-client \
 	supervisor
 
@@ -15,7 +20,6 @@ RUN set -ex; \
 	apk add --no-cache --virtual .build-deps \
 		$PHPIZE_DEPS \
 		freetype-dev \
-		icu-dev \
 		libheif-dev \
 		libavif-dev \
 		libjpeg-turbo-dev \
@@ -38,6 +42,7 @@ RUN set -ex; \
       libjpeg-turbo-dev \
       libpng-dev \
       libwebp-dev \
+    && pecl bundle -d /usr/src/php/ext apcu \
 #    && pecl install imagick \
 #    && docker-php-ext-enable imagick \
     && curl -L -o /tmp/imagick.zip https://github.com/Imagick/imagick/archive/refs/heads/master.zip \
@@ -65,14 +70,15 @@ RUN set -ex; \
 		exif \
 #		imagick \
 		gd \
-		gettext \
 		intl \
+		gettext \
 		mysqli \
 		pgsql \
 		zip \
+		/usr/src/php/ext/apcu \
 	; \
 	docker-php-ext-enable \
-		opcache pgsql; \	
+		pgsql; \	
 	extDir="$(php -r 'echo ini_get("extension_dir");')"; \
 	[ -d "$extDir" ]; \
 	runDeps="$( \
@@ -81,6 +87,7 @@ RUN set -ex; \
 			| sort -u \
 			| awk 'system("[ -e /usr/local/lib/" $1 " ]") == 0 { next } { print "so:" $1 }' \
 	)"; \
+	pecl clear-cache \
 	apk add --no-network --virtual .phpexts-rundeps $runDeps; \
 	apk del --no-network .build-deps .imagick-deps \
 		$PHPIZE_DEPS \
@@ -110,6 +117,8 @@ RUN rm /etc/nginx/http.d/default.conf
 COPY www.conf /usr/local/etc/php-fpm.d/
 COPY php.ini /usr/local/etc/php/
 COPY supervisord.conf /etc/
+
+#ADD "https://www.random.org/cgi-bin/randbyte?nbytes=10&format=h" skipcache
 
 COPY init.sh /init.sh
 RUN chmod +x /init.sh

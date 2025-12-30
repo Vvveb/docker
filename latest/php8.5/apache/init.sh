@@ -11,8 +11,9 @@ if [ ! -d /var/www/html/public/ ]; then
 	export DIR_DIGITAL_ASSETS=${DIR_STORAGE}'/digital_assets'
 	export DIR_IMAGE_CACHE=${DIR_PUBLIC}'/image-cache'
 
-	curl -Lo /tmp/vvveb.zip https://www.vvveb.com/download.php 
-	unzip -o /tmp/vvveb.zip -d ${DIR_VVVEB}
+	curl -Lo /tmp/vvveb.zip https://www.vvveb.com/download.php #latest nightly
+	#curl -sL https://api.github.com/repos/givanz/Vvveb/releases/latest | grep -m1 -oP '"browser_download_url": "\K(.*)(?=")' | xargs -I {} curl -sL {} -o vvveb.zip #latest release
+	unzip /tmp/vvveb.zip -d ${DIR_VVVEB}
 	rm -rf /tmp/vvveb.zip
 	
 	touch ${DIR_STORAGE}/logs/error_log
